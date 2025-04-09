@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, User, AlertCircle, Mail, UserPlus, LogIn } from 'lucide-react';
+import { Patient } from './patient.type';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -21,8 +22,18 @@ const Login = () => {
       if (isLogin) {
         // Handle login
         if (formData.patientId && formData.password) {
-          sessionStorage.setItem('patientId', formData.patientId);
-          navigate('/patient-details');
+          
+          fetch(`http://localhost:3001/liverData/${formData.patientId}`)
+          .then((res)=>res.json())
+          .then((data:Patient)=>{
+            if(String(data.password)===formData.password){
+              navigate('/patient-details');
+              sessionStorage.setItem('patientId',data.id);    
+            }
+          })
+          .catch((err)=>console.log(err))
+
+          
         } else {
           setError('Please fill in all fields');
         }
@@ -43,7 +54,7 @@ const Login = () => {
         sessionStorage.setItem('patientId', formData.patientId);
         navigate('/patient-details');
       }
-    } catch (err) {
+    } catch (error) {
       setError(isLogin ? 'Invalid credentials' : 'Failed to create account');
     }
   };

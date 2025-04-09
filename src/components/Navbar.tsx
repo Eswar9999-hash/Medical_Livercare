@@ -10,7 +10,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     sessionStorage.removeItem('patientId');
-    navigate('/');
+    navigate('/Login');
     setIsMenuOpen(false);
   };
 

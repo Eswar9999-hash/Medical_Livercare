@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, FileText, AlertCircle } from 'lucide-react';
+import { Patient } from './patient.type';
 
 const PatientDetails = () => {
   const navigate = useNavigate();
@@ -19,15 +20,20 @@ const PatientDetails = () => {
       navigate('/login');
       return;
     }
-
+    fetch(`http://localhost:3001/liverData/${patientId}`)
+    .then((res)=>res.json())
+    .then((data:Patient)=>{
+      setPatientData({
+        id: data.id,
+        name: "John Doe",
+        age: data.Age,
+        lastAssessment: "2024-03-15",
+        riskScore: 0.35
+      });
+    })
+    .catch((err)=>console.log(err));
     // Simulate fetching patient data
-    setPatientData({
-      id: patientId,
-      name: "John Doe",
-      age: 45,
-      lastAssessment: "2024-03-15",
-      riskScore: 0.35
-    });
+    
   }, [navigate]);
 
   if (!patientData) {
