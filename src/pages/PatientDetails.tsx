@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, FileText, AlertCircle } from 'lucide-react';
+import { FileText } from 'lucide-react';
 import { Patient } from './patient.type';
 
 const PatientDetails = () => {
@@ -10,6 +10,15 @@ const PatientDetails = () => {
     id: string;
     name: string;
     age: number;
+    Gender: string;
+    Cause_of_Cirrhosis: string;
+    Liver_Function_Score: number;
+    Albumin_Level: number;
+    Bilirubin_Level: number;
+    Platelet_Count: number;
+    Ascites: string;
+    Hepatic_Encephalopathy: string;
+    Survival_1_Year: string;
     lastAssessment: string;
     riskScore: number;
   }>(null);
@@ -21,19 +30,26 @@ const PatientDetails = () => {
       return;
     }
     fetch(`http://localhost:3001/liverData/${patientId}`)
-    .then((res)=>res.json())
-    .then((data:Patient)=>{
-      setPatientData({
-        id: data.id,
-        name: "John Doe",
-        age: data.Age,
-        lastAssessment: "2024-03-15",
-        riskScore: 0.35
-      });
-    })
-    .catch((err)=>console.log(err));
-    // Simulate fetching patient data
-    
+      .then((res) => res.json())
+      .then((data: Patient) => {
+        setPatientData({
+          id: data.id,
+          name: data.Name,
+          age: data.Age,
+          Gender: data.Gender,
+          Cause_of_Cirrhosis: data.Cause_of_Cirrhosis,
+          Liver_Function_Score: data.Liver_Function_Score,
+          Albumin_Level: data.Albumin_Level,
+          Bilirubin_Level: data.Bilirubin_Level,
+          Platelet_Count: data.Platelet_Count,
+          Ascites: data.Ascites,
+          Hepatic_Encephalopathy: data.Hepatic_Encephalopathy,
+          Survival_1_Year: data.Survival_1_Year,
+          lastAssessment:data.Report_Date,
+          riskScore: 0.35,
+        });
+      })
+      .catch((err) => console.log(err));
   }, [navigate]);
 
   if (!patientData) {
@@ -48,7 +64,6 @@ const PatientDetails = () => {
     <div className="max-w-4xl mx-auto">
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Patient Records</h1>
 
-      {/* Patient Information */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-semibold text-gray-900">Patient Information</h2>
@@ -59,6 +74,15 @@ const PatientDetails = () => {
           <InfoField label="Patient ID" value={patientData.id} />
           <InfoField label="Name" value={patientData.name} />
           <InfoField label="Age" value={patientData.age.toString()} />
+          <InfoField label="Gender" value={patientData.Gender} />
+          <InfoField label="Cause of Cirrhosis" value={patientData.Cause_of_Cirrhosis} />
+          <InfoField label="Liver Function Score" value={String(patientData.Liver_Function_Score)} />
+          <InfoField label="Albumin Level" value={String(patientData.Albumin_Level)} />
+          <InfoField label="Bilirubin Level" value={String(patientData.Bilirubin_Level)} />
+          <InfoField label="Platelet Count" value={String(patientData.Platelet_Count)} />
+          <InfoField label="Ascites" value={patientData.Ascites} />
+          <InfoField label="Hepatic Encephalopathy" value={patientData.Hepatic_Encephalopathy} />
+          <InfoField label="Survival 1 Year" value={patientData.Survival_1_Year} />
           <InfoField label="Last Assessment" value={patientData.lastAssessment} />
           <InfoField
             label="Risk Score"

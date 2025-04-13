@@ -22,18 +22,24 @@ const Login = () => {
       if (isLogin) {
         // Handle login
         if (formData.patientId && formData.password) {
-          
-          fetch(`http://localhost:3001/liverData/${formData.patientId}`)
-          .then((res)=>res.json())
-          .then((data:Patient)=>{
-            if(String(data.password)===formData.password){
-              navigate('/patient-details');
-              sessionStorage.setItem('patientId',data.id);    
-            }
-          })
-          .catch((err)=>console.log(err))
-
-          
+          fetch(`http://localhost:3001/liverData?Patient_ID=${formData.patientId}`)
+            .then(res => res.json())
+            .then((data: Patient[]) => {
+              if (
+                data.length > 0 &&
+                data[0].password &&
+                String(data[0].password) === formData.password
+              ) {
+                sessionStorage.setItem('patientId', data[0].Patient_ID);
+                navigate('/patient-details');
+              } else {
+                setError('Invalid patient ID or password');
+              }
+            })
+            .catch((err) => {
+              console.error(err);
+              setError('Failed to connect to server');
+            });
         } else {
           setError('Please fill in all fields');
         }
@@ -43,18 +49,32 @@ const Login = () => {
           setError('Please fill in all fields');
           return;
         }
-        
+
         if (formData.password !== formData.confirmPassword) {
           setError('Passwords do not match');
           return;
         }
 
-        // Here you would typically create a new user account
-        // For now, we'll simulate a successful signup
+        // Create new user account
+        const newUser: Patient = {
+          Patient_ID: formData.patientId,
+          email: formData.email,
+          password: formData.password
+        };
+
+        await fetch('http://localhost:3001/liverData', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(newUser)
+        });
+
         sessionStorage.setItem('patientId', formData.patientId);
         navigate('/patient-details');
       }
     } catch (error) {
+      console.error(error);
       setError(isLogin ? 'Invalid credentials' : 'Failed to create account');
     }
   };
