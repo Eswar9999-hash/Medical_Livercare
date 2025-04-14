@@ -14,7 +14,8 @@
             "Hepatic_Encephalopathy": "Yes",
             "Survival_1_Year": "Yes",
             "password": 1234,
-            "Report_Date": "4\/13\/2023"
+            "Report_Date": "4\/13\/2023",
+            "riskScore":0.05
         },
         {
             "Patient_ID": 2,

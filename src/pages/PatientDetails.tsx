@@ -1,27 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FileText } from 'lucide-react';
 import { Patient } from './patient.type';
 
 const PatientDetails = () => {
   const navigate = useNavigate();
-  const [searchError, setSearchError] = useState(false);
-  const [patientData, setPatientData] = useState<null | {
-    id: string;
-    name: string;
-    age: number;
-    Gender: string;
-    Cause_of_Cirrhosis: string;
-    Liver_Function_Score: number;
-    Albumin_Level: number;
-    Bilirubin_Level: number;
-    Platelet_Count: number;
-    Ascites: string;
-    Hepatic_Encephalopathy: string;
-    Survival_1_Year: string;
-    lastAssessment: string;
-    riskScore: number;
-  }>(null);
+  //const [searchError, setSearchError] = useState(false);
+  const [patientData, setPatientData] = useState<null | Patient>(null);
 
   useEffect(() => {
     const patientId = sessionStorage.getItem('patientId');
@@ -29,24 +14,11 @@ const PatientDetails = () => {
       navigate('/login');
       return;
     }
-    fetch(`http://localhost:3001/liverData/${patientId}`)
+    fetch(`http://localhost:3001/liverData/?Patient_ID=${patientId}`)
       .then((res) => res.json())
-      .then((data: Patient) => {
+      .then((data: Patient[]) => {
         setPatientData({
-          id: data.id,
-          name: data.Name,
-          age: data.Age,
-          Gender: data.Gender,
-          Cause_of_Cirrhosis: data.Cause_of_Cirrhosis,
-          Liver_Function_Score: data.Liver_Function_Score,
-          Albumin_Level: data.Albumin_Level,
-          Bilirubin_Level: data.Bilirubin_Level,
-          Platelet_Count: data.Platelet_Count,
-          Ascites: data.Ascites,
-          Hepatic_Encephalopathy: data.Hepatic_Encephalopathy,
-          Survival_1_Year: data.Survival_1_Year,
-          lastAssessment:data.Report_Date,
-          riskScore: 0.35,
+          ...data[0]
         });
       })
       .catch((err) => console.log(err));
@@ -71,9 +43,9 @@ const PatientDetails = () => {
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
-          <InfoField label="Patient ID" value={patientData.id} />
-          <InfoField label="Name" value={patientData.name} />
-          <InfoField label="Age" value={patientData.age.toString()} />
+          <InfoField label="Patient ID" value={patientData.Patient_ID.toString()} />
+          <InfoField label="Name" value={patientData.Name} />
+          <InfoField label="Age" value={patientData.Age.toString()} />
           <InfoField label="Gender" value={patientData.Gender} />
           <InfoField label="Cause of Cirrhosis" value={patientData.Cause_of_Cirrhosis} />
           <InfoField label="Liver Function Score" value={String(patientData.Liver_Function_Score)} />
@@ -83,7 +55,7 @@ const PatientDetails = () => {
           <InfoField label="Ascites" value={patientData.Ascites} />
           <InfoField label="Hepatic Encephalopathy" value={patientData.Hepatic_Encephalopathy} />
           <InfoField label="Survival 1 Year" value={patientData.Survival_1_Year} />
-          <InfoField label="Last Assessment" value={patientData.lastAssessment} />
+          <InfoField label="Last Assessment" value={patientData.Report_Date} />
           <InfoField
             label="Risk Score"
             value={`${(patientData.riskScore * 100).toFixed(1)}%`}
