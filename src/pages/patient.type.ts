@@ -1,6 +1,7 @@
 export interface Patient {
   Patient_ID: number;
   Name: string;
+  email: string;
   Age: number;
   Gender: 'Male' | 'Female' | 'Other';
   Cause_of_Cirrhosis: string;
@@ -15,4 +16,5 @@ export interface Patient {
   Report_Date: string; 
   riskScore:number;
   id: string;
+  Diet_Recommendation: string;
 }

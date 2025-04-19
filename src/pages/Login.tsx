@@ -30,7 +30,7 @@ const Login = () => {
                 data[0].password &&
                 String(data[0].password) === formData.password
               ) {
-                sessionStorage.setItem('patientId', data[0].Patient_ID);
+                sessionStorage.setItem('patientId', data[0].Patient_ID.toString());
                 navigate('/patient-details');
               } else {
                 setError('Invalid patient ID or password');
@@ -57,7 +57,7 @@ const Login = () => {
 
         // Create new user account
         const newUser: Patient = {
-          Patient_ID: formData.patientId,
+          Patient_ID:parseInt(formData.patientId),
           email: formData.email,
           password: formData.password
         };

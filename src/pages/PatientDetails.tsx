@@ -57,6 +57,7 @@ const PatientDetails = () => {
           <InfoField label="Hepatic Encephalopathy" value={patientData.Hepatic_Encephalopathy} />
           <InfoField label="Survival 1 Year" value={patientData.Survival_1_Year} />
           <InfoField label="Last Assessment" value={patientData.Report_Date} />
+          <InfoField label="Diet Recommendation" value={patientData.Diet_Recommendation} />
           <InfoField
             label="Risk Score"
             value={`${(patientData.riskScore * 100).toFixed(1)}%`}
