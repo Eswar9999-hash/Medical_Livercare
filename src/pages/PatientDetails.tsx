@@ -17,6 +17,7 @@ const PatientDetails = () => {
     fetch(`http://localhost:3001/liverData/?Patient_ID=${patientId}`)
       .then((res) => res.json())
       .then((data: Patient[]) => {
+        console.log(data);
         setPatientData({
           ...data[0]
         });
